@@ -1,0 +1,194 @@
+CREATE DATABASE csad_final;
+
+CREATE TABLE users (
+    userId int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    userName varchar(128) NOT NULL,
+    userEmail varchar(128) NOT NULL,
+    userPwd varchar(128) NOT NULL	
+);
+
+ALTER TABLE users
+ADD COLUMN amount INT DEFAULT 0;
+
+
+CREATE TABLE stocks (
+    stock_id INT AUTO_INCREMENT PRIMARY KEY,
+    stockShortName VARCHAR(60) NOT NULL,
+    stockLongName VARCHAR(255) NOT NULL,
+    stockDescription VARCHAR(500) NOT NULL,
+    category_id INT NOT NULL
+);
+
+
+
+
+CREATE TABLE category (
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    categoryName VARCHAR(128) NOT NULL
+);
+
+INSERT INTO category (categoryName) VALUES ('Technology');
+INSERT INTO category (categoryName) VALUES ('Healthcare and Pharmaceutical');
+INSERT INTO category (categoryName) VALUES ('Finance and Real Estate');
+INSERT INTO category (categoryName) VALUES ('Consumer Goods and Service');
+INSERT INTO category (categoryName) VALUES ('Energy and Industrials');
+
+ALTER TABLE stocks
+ADD CONSTRAINT fk_category
+FOREIGN KEY (category_id) 
+REFERENCES Category(category_id);
+
+INSERT INTO stocks (stockShortName, stockLongName, stockDescription, category_id)
+VALUES 
+('NVDA', 'NVIDIA Corporation', 'Technology company known for its graphics processing units (GPUs)', 1),
+('MSFT', 'Microsoft Corporation', 'Technology company known for its software, hardware, and services', 1),
+('AAPL', 'Apple Inc.', 'Technology company known for its iPhones, iPads, and Macs', 1),
+('TSLA', 'Tesla Inc.', 'Electric vehicle and clean energy company', 1);
+
+CREATE TABLE watchlist (
+    watchlistId INT AUTO_INCREMENT PRIMARY KEY,
+    userId INT,
+    FOREIGN KEY (userId) REFERENCES users(userId)
+);
+
+
+CREATE TABLE watchlist_items (
+    watchlistId INT,
+    stock_id INT,
+    PRIMARY KEY (watchlistId, stock_id),
+    FOREIGN KEY (watchlistId) REFERENCES watchlist(watchlistId),
+    FOREIGN KEY (stock_id) REFERENCES stocks(stock_id)
+);
+
+CREATE TABLE orderTypes (
+    orderTypeId INT AUTO_INCREMENT PRIMARY KEY,
+    orderTypeName VARCHAR(45) NOT NULL
+);
+
+INSERT INTO orderTypes (orderTypeName) VALUES ('Limit');
+INSERT INTO orderTypes (orderTypeName) VALUES ('Market');
+
+CREATE TABLE orderActions (
+    orderActionId INT AUTO_INCREMENT PRIMARY KEY,
+    orderActionName VARCHAR(45) NOT NULL
+);
+
+INSERT INTO orderActions (orderActionName) VALUES ('Buy');
+INSERT INTO orderActions (orderActionName) VALUES ('Sell');
+
+CREATE TABLE orders (
+    orderId INT AUTO_INCREMENT PRIMARY KEY,
+    userId INT,
+    stock_id INT,
+    orderTime DATETIME,
+    quantity INT,
+    orderTypeId INT,
+    orderActionId INT,
+    FOREIGN KEY (userId) REFERENCES users(userId),
+    FOREIGN KEY (stock_id) REFERENCES stocks(stock_id),
+    FOREIGN KEY (orderTypeId) REFERENCES orderTypes(orderTypeId),
+    FOREIGN KEY (orderActionId) REFERENCES orderActions(orderActionId)
+);
+
+
+CREATE TABLE portfolio (
+    portfolioId INT AUTO_INCREMENT PRIMARY KEY,
+    userId INT,
+    stock_id INT,
+    netQuantity INT,
+    FOREIGN KEY (userId) REFERENCES users(userId),
+    FOREIGN KEY (stock_id) REFERENCES stocks(stock_id)
+);
+
+ALTER TABLE orders
+ADD COLUMN price INT NOT NULL;
+
+
+
+ALTER TABLE orders
+DROP FOREIGN KEY `orders_ibfk_3`;
+
+ALTER TABLE orders
+DROP COLUMN orderTypeId;
+
+DROP TABLE orderTypes;
+
+SELECT 
+    CONSTRAINT_NAME
+FROM 
+    INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE 
+    TABLE_NAME = 'orders' AND 
+    COLUMN_NAME = 'orderTypeId' AND 
+    CONSTRAINT_SCHEMA = 'csad_final';
+
+
+ALTER TABLE portfolio ADD UNIQUE(userId, stock_id);
+
+ALTER TABLE orders MODIFY price DECIMAL(10, 2);
+
+INSERT INTO stocks (stockShortName, stockLongName, stockDescription, category_id) VALUES
+('GOOG', 'Alphabet Inc.', 'Technology company that is the parent company of Google, specializing in internet-related services and products.', 1),
+('AMZN', 'Amazon.com Inc.', 'E-commerce giant that also focuses on cloud computing, digital streaming, and artificial intelligence.', 1),
+('META', 'Meta Platforms Inc.', 'Social media conglomerate owning Facebook, Instagram, WhatsApp, and Oculus.', 1),
+('TSM', 'Taiwan Semiconductor Manufacturing Company (TSMC)', 'Leading semiconductor manufacturer, specializing in chip manufacturing and semiconductor technology.', 1),
+('INTC', 'Intel Corporation', 'Global technology company known for its processors and semiconductor solutions.', 1),
+('CSCO', 'Cisco Systems Inc.', 'Multinational technology conglomerate that develops, manufactures, and sells networking hardware and software.', 1),
+('ADBE', 'Adobe Inc.', 'Software company known for its creative and multimedia software products.', 1),
+('CRM', 'Salesforce.com Inc.', 'Cloud-based software company specializing in customer relationship management services.', 1),
+('AVGO', 'Broadcom Inc.', 'Global technology company specializing in semiconductors and infrastructure software solutions.', 1),
+('ORCL', 'Oracle Corporation', 'Multinational computer technology corporation known for database software and technology.', 1),
+('IBM', 'IBM Corporation', 'Multinational technology company providing hardware, software, and consulting services.', 1),
+('QCOM', 'Qualcomm Inc.', 'Multinational corporation known for its semiconductor and telecommunications products.', 1),
+('AMD', 'Advanced Micro Devices Inc.', 'Semiconductor company known for its computer processors and related technologies.', 1),
+('SHOP', 'Shopify Inc.', 'E-commerce platform that allows businesses to create online stores.', 1),
+('ZM', 'Zoom Video Communications Inc.', 'Communications technology company known for its video conferencing platform.', 1),
+('NOW', 'ServiceNow Inc.', 'Enterprise software company providing cloud-based solutions for IT service management.', 1);
+
+INSERT INTO stocks (stockShortName, stockLongName, stockDescription, category_id) VALUES
+('JNJ', 'Johnson & Johnson', 'Multinational corporation known for its pharmaceuticals, medical devices, and consumer health products.', 2),
+('PFE', 'Pfizer Inc.', 'Global pharmaceutical corporation known for its vaccines, medicines, and consumer healthcare products.', 2),
+('AMGN', 'Amgen Inc.', 'Biopharmaceutical company specializing in innovative human therapeutics.', 2),
+('MRK', 'Merck & Co., Inc.', 'Global healthcare company known for its prescription medicines, vaccines, biologic therapies, and animal health products.', 2),
+('NVS', 'Novartis AG', 'Multinational pharmaceutical company known for its innovative medicines, generics, and eye care products.', 2),
+('ABBV', 'AbbVie Inc.', 'Biopharmaceutical company specializing in immunology, oncology, virology, and neuroscience.', 2),
+('BMY', 'Bristol-Myers Squibb Company', 'Biopharmaceutical company known for its innovative medicines in oncology, hematology, immunology, and cardiovascular diseases.', 2),
+('LLY', 'Eli Lilly and Company', 'Pharmaceutical company known for its innovative medicines in diabetes, oncology, immunology, and neurodegeneration.', 2),
+('GSK', 'GlaxoSmithKline plc', 'Global healthcare company known for its vaccines, medicines, and consumer healthcare products.', 2),
+('SNY', 'Sanofi S.A.', 'Global healthcare company known for its innovative medicines, vaccines, and consumer health products.', 2);
+
+INSERT INTO stocks (stockShortName, stockLongName, stockDescription, category_id) VALUES
+('JPM', 'JPMorgan Chase & Co.', 'Multinational investment bank and financial services holding company.', 3),
+('BAC', 'Bank of America Corporation', 'Multinational investment bank and financial services company.', 3),
+('WFC', 'Wells Fargo & Company', 'Multinational financial services company providing banking, mortgage, investing, credit card, and personal finance services.', 3),
+('C', 'Citigroup Inc.', 'Multinational investment bank and financial services corporation.', 3),
+('GS', 'Goldman Sachs Group Inc.', 'Multinational investment bank and financial services company.', 3),
+('MS', 'Morgan Stanley', 'Multinational investment bank and financial services company.', 3),
+('PLD', 'Prologis Inc.', 'Global logistics real estate investment trust (REIT) company.', 3),
+('AXP', 'American Express Company', 'Multinational financial services corporation known for its credit card, charge card, and traveler\'s cheque businesses.', 3),
+('BLK', 'BlackRock, Inc.', 'Multinational investment management corporation.', 3),
+('V', 'Visa Inc.', 'Multinational financial services corporation specializing in digital payments and technology.', 3);
+
+INSERT INTO stocks (stockShortName, stockLongName, stockDescription, category_id) VALUES
+('WMT', 'Walmart Inc.', 'Multinational retail corporation that operates a chain of hypermarkets, discount department stores, and grocery stores.', 4),
+('PG', 'The Procter & Gamble Company', 'Multinational consumer goods corporation specializing in a wide range of personal health/consumer health, and hygiene products.', 4),
+('KO', 'The Coca-Cola Company', 'Multinational beverage corporation known for its flagship product Coca-Cola.', 4),
+('PEP', 'PepsiCo, Inc.', 'Multinational food, snack, and beverage corporation.', 4),
+('CL', 'Colgate-Palmolive Company', 'Multinational consumer products company specializing in the production, distribution, and provision of household, health care, and personal care products.', 4),
+('UL', 'Unilever PLC', 'Multinational consumer goods company specializing in foods, beverages, cleaning agents, and personal care products.', 4),
+('DIS', 'The Walt Disney Company', 'Multinational mass media and entertainment conglomerate.', 4),
+('MCD', 'McDonald\'s Corporation', 'Multinational fast food company known for its hamburgers, cheeseburgers, and french fries.', 4),
+('NKE', 'Nike, Inc.', 'Multinational corporation that designs, manufactures, and sells footwear, apparel, equipment, and accessories.', 4),
+('COST', 'Costco Wholesale Corporation', 'Multinational corporation that operates a chain of membership-only warehouse clubs.', 4);
+
+INSERT INTO stocks (stockShortName, stockLongName, stockDescription, category_id) VALUES
+('XOM', 'ExxonMobil Corporation', 'Multinational oil and gas corporation.', 5),
+('CVX', 'Chevron Corporation', 'Multinational energy corporation.', 5),
+('RDS.A', 'Royal Dutch Shell plc (RDS.A)', 'Multinational oil and gas company.', 5),
+('BP', 'BP plc', 'Multinational oil and gas company.', 5),
+('TTE', 'TotalEnergies SE', 'Multinational integrated oil and gas company.', 5),
+('GE', 'General Electric Company', 'Multinational conglomerate company specializing in energy, aviation, and healthcare.', 5),
+('NEE', 'NextEra Energy, Inc.', 'American energy company focused on renewable energy.', 5),
+('SLB', 'Schlumberger Limited', 'Multinational oilfield services company.', 5),
+('HON', 'Honeywell International Inc.', 'Multinational conglomerate company producing commercial and consumer products, engineering services, and aerospace systems.', 5),
+('CAT', 'Caterpillar Inc.', 'Multinational corporation specializing in manufacturing construction and mining equipment, diesel and natural gas engines, industrial gas turbines, and diesel-electric locomotives.', 5);

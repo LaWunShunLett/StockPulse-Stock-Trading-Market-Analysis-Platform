@@ -1,0 +1,105 @@
+body {
+   
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #121212; /* Very dark background */
+    color: #e0e0e0; /* Light grey text */
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.container {
+    margin-top: 70px;
+    width: 90%;
+    max-width: 1200px;
+    padding: 80px;
+    margin: auto;
+    flex-grow: 1;
+}
+
+.contact-form, .faq {
+    margin-bottom: 40px;
+    background: #1e1e1e; /* Dark grey container background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #e0e0e0; /* Light grey text */
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #a0a0a0; /* Medium grey text */
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #333; /* Darker grey border */
+    border-radius: 4px;
+    background: #1e1e1e; /* Dark grey background */
+    color: #e0e0e0; /* Light grey text */
+    outline: none; /* Remove the default outline on focus */
+    box-shadow: none; /* Remove the default box-shadow on focus */
+      
+}
+
+input:-webkit-autofill, textarea:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #1e1e1e inset; /* Use the same background color as your input */
+    box-shadow: 0 0 0 1000px #1e1e1e inset;
+    -webkit-text-fill-color: #e0e0e0; /* Use the same text color as your input */
+}
+
+textarea {
+    resize: none; /* Disables resizing for the textarea */
+}
+
+input::placeholder, textarea::placeholder {
+    color: #888; /* Light grey placeholder text */
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #1abc9c; /* Blue button */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: grey; /* Darker blue button on hover */
+}
+
+.faq-item {
+    margin-bottom: 20px;
+}
+
+.faq-item h3 {
+    margin: 0;
+    color: #e0e0e0; /* Light grey text */
+}
+
+.faq-item p {
+    margin: 5px 0;
+    color: #a0a0a0; /* Medium grey text */
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+}

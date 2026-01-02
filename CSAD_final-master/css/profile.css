@@ -1,0 +1,73 @@
+        .profile-section {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        body {
+            background-color: #121212;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            margin-top: 60px;
+        }
+        .form-label, .btn {
+            color: #fff;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .btn-outline-primary {
+            border-color: #007bff;
+            color: #007bff;
+        }
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-bar {
+            background-color: transparent;
+            border: 1px solid #007bff;
+            color: #007bff;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+        .btn-bar:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .btn-text {
+            background: none;
+            border: none;
+            padding: 0;
+            color: #fff;
+            cursor: pointer;
+        }
+        .btn-text2 {
+            background: none;
+            border: none;
+            padding: 0;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .btn-text:focus, .btn-text:hover {
+            text-decoration: underline;
+            background: none;
+        }
+        .logout-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+       
